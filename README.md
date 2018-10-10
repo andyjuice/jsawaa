@@ -2,6 +2,14 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.0-rc.1.
 
+## Resources Used / Thanks:
+
+ng2-ace-editor:
+https://github.com/fxmontigny/ng2-ace-editor
+
+Jison parser/generator:
+http://zaa.ch/jison/docs/#the-concepts-of-jison
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
