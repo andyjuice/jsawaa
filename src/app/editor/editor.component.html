@@ -1,1 +1,7 @@
 <h2>This will the be the ace editor component</h2>
+<ace-editor [(text)]="text" #editor style="height:200px; width:50%"></ace-editor>
+<hr/>
+<button (click)="onSubmit()">Submit</button>
+<p>
+  {{userInput}}
+</p>
