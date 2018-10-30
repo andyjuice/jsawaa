@@ -1,16 +1,17 @@
 <div class="row">
   <div class="column">
     <mat-card>
-      <ace-editor [(ngModel)]="editorVal" style="height:200px; width:auto"></ace-editor>
+      <ace-editor [(ngModel)]="userInput" style="height:200px; width:auto"></ace-editor>
       <br />
       <button mat-stroked-button (click)="onSubmit()">Run Code</button>
+      <button mat-stroked-button class="clear_button" (click)="clearCanvas()">Clear Canvas</button>
     </mat-card>
   </div>
   <br />
   <div class="column">
   <mat-card>
-    <p class="angular-linebreaks">
-      {{userInput}}
+    <p class="angular-linebreaks" id={{color}}>
+      {{errorOut}}
     </p>
     <div #canvasContainer>
       <canvas #sCanvas></canvas>
