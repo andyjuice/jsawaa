@@ -11,12 +11,13 @@ export class EditorComponent implements OnInit {
   //potentially problematic
   private context: CanvasRenderingContext2D;
   private userInput: string = "";
-  private errorOut: string = "";
-  private color: string;
+  private errorOut: string;
+  private isValid: boolean = null;
+  private hasSubmit: boolean = false;
   //IMPORTANT: SAVE OBJECTS IN DATA STRUCTURES
 
   //CONSTRCTOR & INIT
-  constructor() { }
+  constructor() {}
   ngOnInit() {
     this.context = (this.sCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
   }
@@ -40,14 +41,15 @@ export class EditorComponent implements OnInit {
       }else if(call.match(/^(begin|delay|groupObject|connectNodes)$/)){
         this.otherCommands(func);
       }else {
-        this.color = "red";
+        this.isValid = false;
         this.errorOut = "ERROR: Call to command, " + call + ", could not be found!"
       }
     }
   }
-  //function to draw primitive shapes
+  //function to draw primitive shapes [SHOUT OUT TO SHOUT OUT TO: http://fabricjs.com/]
   private drawShape(func : string[]) {
     var call: string = func[0];
+    var name: string = func[1];
 
     if (call == "circle") {
     } else if (call == "line") {
@@ -78,8 +80,6 @@ export class EditorComponent implements OnInit {
 
   }
 
-
-
   private drawCircle() {
   }
 
@@ -95,19 +95,19 @@ export class EditorComponent implements OnInit {
 
 
   onSubmit() {
+    //variable functions name is confusing
+    this.hasSubmit=false;
+    this.isValid=true;
     var functions: string[] = this.userInput.split("\n");
     for (var i = 0; i < functions.length; i++) {
       this.readFunc(functions[i]);
     }
     //if everything worked
-    if(this.color != "red"){
-      this.color = "green";
+    if(this.isValid){
       this.errorOut = "SUCCESS: code ran without any noticeable errors!"
     }
-
-
+    this.hasSubmit=true;
   }
-
   clearCanvas() {
     this.context.clearRect(0, 0, (this.sCanvas.nativeElement as HTMLCanvasElement).width, (this.sCanvas.nativeElement as HTMLCanvasElement).height);
   }
