@@ -1,4 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+
+import 'fabric';
+declare const fabric: any;
 
 @Component({
   selector: 'app-editor',
@@ -7,19 +10,24 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 })
 
 export class EditorComponent implements OnInit {
-  @ViewChild('sCanvas') sCanvas: ElementRef;
+  @ViewChild('rMatCard') rightMC: ElementRef;
   //potentially problematic
   private context: CanvasRenderingContext2D;
   private userInput: string = "";
   private errorOut: string;
   private isValid: boolean = null;
   private hasSubmit: boolean = false;
+  private canvas: any;
   //IMPORTANT: SAVE OBJECTS IN DATA STRUCTURES
 
   //CONSTRCTOR & INIT
   constructor() {}
   ngOnInit() {
-    this.context = (this.sCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+    this.canvas = new fabric.Canvas('canvas', {selection: false});
+    //working but cannot dynamically resize
+    this.canvas.setHeight((this.rightMC.nativeElement as HTMLElement).offsetHeight);
+    this.canvas.setWidth((this.rightMC.nativeElement as HTMLElement).offsetWidth);
+    this.canvas.renderAll();
   }
 
   //PARSING, ETC.
@@ -29,7 +37,7 @@ export class EditorComponent implements OnInit {
       var call: string = func[0];
 
       //draw primitive shapes
-      if(call.match(/^(circle|line|text|rectange|oval|polygon)$/)){
+      if(call.match(/^(circle|line|text|rectangle|oval|polygon)$/)){
         this.drawShape(func);
       //draw data structures
       }else if(call.match(/^(array|queue|stack|list|listpointer|tree|graph|node|marker)$/)){
@@ -50,19 +58,37 @@ export class EditorComponent implements OnInit {
   private drawShape(func : string[]) {
     var call: string = func[0];
     var name: string = func[1];
+    var shape: any;
 
+    //save in hashmap of variable names to fabric.js objects
     if (call == "circle") {
+      shape = new fabric.Circle({
+        radius: 20, fill: 'green'
+      });
     } else if (call == "line") {
-
+      shape = new fabric.Line([50, 100, 200, 200], {
+        left: 170,
+        top: 150,
+        stroke: 'black'
+      });
     } else if (call == "text") {
-
+      shape = new fabric.Text('TEXT', {
+        fill: 'blue'
+      });
     } else if (call == "rectangle") {
-
+      shape = new fabric.Rect({
+        width: 10, height: 20, fill: 'red'
+      });
     } else if (call == "oval") {
-
+      shape = new fabric.Ellipse({
+        stroke: 'pink'
+      });
     } else if (call == "polygon") {
-
+      shape = new fabric.Rect({
+        fill: 'red'
+      });
     }
+    this.canvas.add(shape);
   }
 
   //function to render data structure
@@ -108,7 +134,7 @@ export class EditorComponent implements OnInit {
     }
     this.hasSubmit=true;
   }
-  clearCanvas() {
-    this.context.clearRect(0, 0, (this.sCanvas.nativeElement as HTMLCanvasElement).width, (this.sCanvas.nativeElement as HTMLCanvasElement).height);
+  clearCanvas(){
+    this.canvas.clear();
   }
 }

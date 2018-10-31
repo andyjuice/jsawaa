@@ -8,14 +8,16 @@
     </mat-card>
   </div>
   <br />
-  <div class="column_right">
+  <div class="column_right" #rColumn>
   <mat-card>
-    <p class="angular-linebreaks" *ngIf="this.hasSubmit" [ngClass]="{'red': !this.isValid, 'green': this.isValid}">
-      {{errorOut}}
-    </p>
+    <div class=card_div #rMatCard>
+      <p class="angular-linebreaks" *ngIf="this.hasSubmit" [ngClass]="{'red': !this.isValid, 'green': this.isValid}">
+        {{errorOut}}
+      </p>
     <div #canvasContainer>
-      <canvas #sCanvas></canvas>
+      <canvas id=canvas></canvas>
     </div>
+  </div>
   </mat-card>
   </div>
 </div>
