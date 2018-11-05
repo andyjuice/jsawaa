@@ -30,7 +30,8 @@ export class EditorComponent implements OnInit {
     this.canvas.renderAll();
   }
 
-  //PARSING, ETC.
+/* PARSING & MORE */
+
   private readFunc(f: string) {
     if (f != undefined || f.length > 0) {
       var func: string[] = f.split(" ").filter(Boolean);
@@ -54,7 +55,9 @@ export class EditorComponent implements OnInit {
       }
     }
   }
+
   //function to draw primitive shapes [SHOUT OUT TO SHOUT OUT TO: http://fabricjs.com/]
+
   private drawShape(func: string[]) {
     var call: string = func[0];
 
@@ -93,6 +96,7 @@ export class EditorComponent implements OnInit {
   }
 
   //function to render data structure
+
   private drawDataStruct(func: string[]) {
 
   }
@@ -105,9 +109,6 @@ export class EditorComponent implements OnInit {
   //function for all other functions (connect nodes excluded, most are grouping and regulatory)
   private otherCommands(func: string[]) {
 
-  }
-
-  private colorCheck() {
   }
 
   // DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES
@@ -436,17 +437,10 @@ export class EditorComponent implements OnInit {
     });
   }
 
-
   //modifyCircle
   private modifyCircle() {
 
   }
-
-  private testColor(color: string){
-    // if()
-    return true;
-  }
-  private
 
   onSubmit() {
     //variable functions name is confusing
