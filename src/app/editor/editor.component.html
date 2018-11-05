@@ -2,6 +2,7 @@
   <div class="column_left">
     <mat-card>
       <ace-editor [(ngModel)]="userInput" style="height:450px; width:auto"></ace-editor>
+    
       <br />
       <button mat-stroked-button (click)="onSubmit()">Run Code</button>
       <button mat-stroked-button class="clear_button" (click)="clearCanvas()">Clear Canvas</button>
