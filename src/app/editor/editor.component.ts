@@ -20,7 +20,7 @@ export class EditorComponent implements OnInit {
   private canvas: any;
   //IMPORTANT: SAVE OBJECTS IN DATA STRUCTURES
 
-  //CONSTRCTOR & INIT
+/* CONSTRCTOR & INIT */
   constructor() { }
   ngOnInit() {
     this.canvas = new fabric.Canvas('canvas', { selection: false });
@@ -111,7 +111,7 @@ export class EditorComponent implements OnInit {
 
   }
 
-  // DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES
+/* DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES */
 
   private drawCircle(func: string[], name: string) {
     var shape: any;
