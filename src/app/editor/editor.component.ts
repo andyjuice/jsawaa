@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 import 'fabric';
+import 'hashmap'
 declare const fabric: any;
 
 @Component({
@@ -12,15 +13,15 @@ declare const fabric: any;
 export class EditorComponent implements OnInit {
   @ViewChild('rMatCard') rightMC: ElementRef;
   //potentially problematic
-  private context: CanvasRenderingContext2D;
   private userInput: string = "";
   private errorOut: string;
   private isValid: boolean = null;
   private hasSubmit: boolean = false;
   private canvas: any;
+  private varMap:string[] = [];
   //IMPORTANT: SAVE OBJECTS IN DATA STRUCTURES
 
-/* CONSTRCTOR & INIT */
+  /* CONSTRCTOR & INIT */
   constructor() { }
   ngOnInit() {
     this.canvas = new fabric.Canvas('canvas', { selection: false });
@@ -30,7 +31,14 @@ export class EditorComponent implements OnInit {
     this.canvas.renderAll();
   }
 
-/* PARSING & MORE */
+  onResize() {
+    this.canvas.setHeight((this.rightMC.nativeElement as HTMLElement).offsetHeight);
+    this.canvas.setWidth((this.rightMC.nativeElement as HTMLElement).offsetWidth);
+    this.canvas.renderAll();
+
+  }
+
+  /* PARSING & MORE */
 
   private readFunc(f: string) {
     if (f != undefined || f.length > 0) {
@@ -92,6 +100,8 @@ export class EditorComponent implements OnInit {
       return;
     } else {
       this.canvas.add(shape);
+      this.varMap.push(name);
+      console.log(this.indexOf(this.varMap, name));
     }
   }
 
@@ -111,7 +121,7 @@ export class EditorComponent implements OnInit {
 
   }
 
-/* DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES */
+  /* DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES | DRAWING THE SHAPES */
 
   private drawCircle(func: string[], name: string) {
     var shape: any;
@@ -394,12 +404,12 @@ export class EditorComponent implements OnInit {
         } else {
           var x = parseFloat(func[i]);
         }
-      }else{
+      } else {
         this.isValid = false;
-        this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function (value not found @ x"+ val +" parameter)!";
+        this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function (value not found @ x" + val + " parameter)!";
         return;
       }
-      if(i+1 <= func.length - 1){
+      if (i + 1 <= func.length - 1) {
         if (isNaN(parseFloat(func[i + 1]))) {
           this.isValid = false;
           this.errorOut = "ERROR: Incorrect type @ y-position parameter";
@@ -407,12 +417,12 @@ export class EditorComponent implements OnInit {
         } else {
           var y = parseFloat(func[i + 1]);
         }
-      }else{
+      } else {
         this.isValid = false;
-        this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function (value not found @ y"+ val +" parameter)!";
+        this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function (value not found @ y" + val + " parameter)!";
         return;
       }
-      points.push({x: x, y: y});
+      points.push({ x: x, y: y });
       val++;
     }
 
@@ -423,8 +433,8 @@ export class EditorComponent implements OnInit {
       this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function (value not found @ color parameter)!";
       return;
     }
-    if (i+1 <= func.length - 1) { // fill color
-      var fill = func[i+1];
+    if (i + 1 <= func.length - 1) { // fill color
+      var fill = func[i + 1];
     } else {
       this.isValid = false;
       this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function (value not found @ background color parameter)!";
@@ -435,6 +445,19 @@ export class EditorComponent implements OnInit {
     return shape = new fabric.Polygon(points, {
       stroke: stroke, fill: fill
     });
+  }
+
+  /* TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS*/
+
+  //indexOf
+
+  private indexOf(variableMap: string[], variable: string){
+    for(var i = 0; i < variableMap.length; i++){
+      if(variableMap[i] === variable){
+        return i;
+      }
+    }
+    return -1;
   }
 
   //modifyCircle

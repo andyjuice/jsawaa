@@ -25,6 +25,7 @@
     "core-js": "^2.5.4",
     "fabric": "^2.4.2-b",
     "hammerjs": "^2.0.8",
+    "hashmap": "^2.3.0",
     "ng2-ace-editor": "^0.3.8",
     "rxjs": "~6.3.3",
     "zone.js": "~0.8.26"

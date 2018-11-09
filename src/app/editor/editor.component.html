@@ -1,20 +1,19 @@
 <div class="row">
   <div class="column_left">
     <mat-card>
-      <ace-editor [(ngModel)]="userInput" style="height:450px; width:auto"></ace-editor>
-    
+      <ace-editor [(ngModel)]="userInput" style="height:500px; width:auto"></ace-editor>
+
       <br />
       <button mat-stroked-button (click)="onSubmit()">Run Code</button>
       <button mat-stroked-button class="clear_button" (click)="clearCanvas()">Clear Canvas</button>
     </mat-card>
   </div>
-  <br />
-  <div class="column_right" #rColumn>
+  <div (window:resize)="onResize()" class="column_right" #rColumn>
   <mat-card>
-    <div class=card_div #rMatCard>
-      <p class="angular-linebreaks" *ngIf="this.hasSubmit" [ngClass]="{'red': !this.isValid, 'green': this.isValid}">
+    <p class="angular-linebreaks" *ngIf="this.hasSubmit" [ngClass]="{'red': !this.isValid, 'green': this.isValid}">
         {{errorOut}}
-      </p>
+    </p>
+    <div class=card_div #rMatCard>
     <div #canvasContainer>
       <canvas id=canvas></canvas>
     </div>
