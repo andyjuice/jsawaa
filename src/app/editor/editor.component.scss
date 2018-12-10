@@ -48,3 +48,15 @@ canvas{
   background-color: #ccffcc;
   padding: 4px;
 }
+.speed_slider{
+  margin-left: 10px;
+}
+::ng-deep .mat-accent .mat-slider-thumb {
+    background-color: #87CEEB;
+}
+::ng-deep .mat-accent .mat-slider-thumb-label {
+    background-color: #87CEEB;
+}
+::ng-deep .mat-accent .mat-slider-track-fill {
+    background-color: #87CEEB;
+}
