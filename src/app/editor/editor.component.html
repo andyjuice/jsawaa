@@ -7,7 +7,7 @@
       <button mat-stroked-button (click)="onSubmit()">Run Code</button>
       <button mat-stroked-button class="clear_button" (click)="clearCanvas()">Clear Canvas</button>
       <button mat-stroked-button class="clear_button" (click)="showSlider()" *ngIf="!this.showSS">Step Speed</button>
-      <mat-slider class="speed_slider" style="color:#007FFF" *ngIf="this.showSS" thumbLabel [displayWith]="formatLabel" [max]=5 [min]=0.5 [step]=0.5 [tickInterval]=0.5 [(ngModel)]="speedVal">
+      <mat-slider class="speed_slider" style="color:#007FFF" *ngIf="this.showSS" thumbLabel [displayWith]="formatLabel" [max]=5 [min]=0.25 [step]=0.25 [tickInterval]=0.5 [(ngModel)]="speedVal">
       </mat-slider>
       <button mat-button style="color:#007FFF" (click)="showSlider()" *ngIf="this.showSS">OK</button>
     </mat-card>

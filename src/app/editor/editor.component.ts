@@ -543,7 +543,7 @@ export class EditorComponent implements OnInit {
     }else{
       if(this.map.get(func[1]) < 0){
         this.isValid = false;
-        this.errorOut = "ERROR: Could not find target name, " + func[1] +  "(line "+ this.line + ")";
+        this.errorOut = "ERROR: Could not find target name, " + func[1] +  "[line "+ this.line + "]";
         return;
       }
       var shape = this.canvas.item(this.map.get(func[1]));
@@ -652,7 +652,13 @@ export class EditorComponent implements OnInit {
     }
   }
   private remove(func: string[]){
-      var name = func[1];
+    if(1 > func.length-1){
+      this.isValid = false;
+      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + "[line " + this.line + "]";
+      return;
+    }else{
+      this.canvas.remove();
+    }
   }
 
   /*ON SUBMISSION FUNCTIONS | ON SUBMISSION FUNCTIONS | ON SUBMISSION FUNCTIONS | ON SUBMISSION FUNCTIONS*/
@@ -697,6 +703,7 @@ export class EditorComponent implements OnInit {
   //Clears the canvas
   clearCanvas() {
     this.canvas.clear();
+    this.map.clear();
   }
   //Shows the slider
   showSlider(){
