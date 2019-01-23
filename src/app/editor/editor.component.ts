@@ -38,6 +38,8 @@ export class EditorComponent implements OnInit {
   private displaySpeed = 0.5;
   //speed slider curr value
   private speedVal: number;
+  //array to keep track of all the indeces removed, used to calculate shift
+  private removedIndices = new Array();
 
   //IMPORTANT: SAVE OBJECTS IN DATA STRUCTURES
 
@@ -651,14 +653,35 @@ export class EditorComponent implements OnInit {
       }
     }
   }
+
+  /* REMOVE A VALUE */
   private remove(func: string[]){
     if(1 > func.length-1){
       this.isValid = false;
-      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + "[line " + this.line + "]";
+      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + func[0] + "[line " + this.line + "]";
       return;
     }else{
-      this.canvas.remove();
+      var removedItem = func[1];
+      if(this.map.has(removedItem)){
+        var shift = 0;
+        var number = this.map.get(removedItem);
+        for(var i = 0; i < this.removedIndices.length; i++){
+          if(this.removedIndices[i] < number){
+            console.log(this.removedIndices[i] + " ? " + number);
+            shift++;
+          }
+        }
+        console.log("shift = " + shift);
+      }else{
+        this.isValid = false;
+        this.errorOut = "ERROR: Cannot find variable with name " + removedItem + "@" + func[0] + "[line " + this.line + "]";
+        return;
+      }
+      console.log(this.canvas.item(number-shift));
+      this.canvas.remove(this.canvas.item(number-shift));
+      this.removedIndices.push(number);
     }
+
   }
 
   /*ON SUBMISSION FUNCTIONS | ON SUBMISSION FUNCTIONS | ON SUBMISSION FUNCTIONS | ON SUBMISSION FUNCTIONS*/
@@ -666,6 +689,8 @@ export class EditorComponent implements OnInit {
   async onSubmit() {
     //clears the stuff in the hashmap
     this.map.clear();
+    //clears the values in the removedIndices
+    this.removedIndices.splice(0, this.removedIndices.length);
     //variable functions name is confusing
     this.hasSubmit = false;
     this.isValid = true;
