@@ -202,6 +202,15 @@ export class EditorComponent implements OnInit {
   //function for all other functions (connect nodes excluded, most are grouping and regulatory)
 
   private otherCommands(func: string[]) {
+    var call: string = func[0];
+
+    if(call == "begin"){
+
+    }else if(call == "delay"){
+      this.delay(func);
+    }else if(call == "groupObject"){
+      this.groupObject(func);
+    }
 
   }
 
@@ -531,8 +540,7 @@ export class EditorComponent implements OnInit {
     });
   }
 
-  /* TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS*/
-
+  /* TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS */
 
   /* CHANGE THE PARAMETERS */
   private changeParam(func: string[]){
@@ -653,7 +661,6 @@ export class EditorComponent implements OnInit {
       }
     }
   }
-
   /* REMOVE A VALUE */
   private remove(func: string[]){
     if(1 > func.length-1){
@@ -681,6 +688,24 @@ export class EditorComponent implements OnInit {
       this.canvas.remove(this.canvas.item(number-shift));
       this.removedIndices.push(number);
     }
+
+  }
+
+  /* OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS */
+
+  /* NOT WORKING BUT DELAY */
+  async delay(func: string[]){
+    if(isNaN(parseFloat(func[1]))){
+      this.isValid = false;
+      this.errorOut = "ERROR: Incorrect type @ time (milliseconds) parameter [line " + this.line + "]";
+      return;
+    }
+    var millidelay = parseFloat(func[1])
+    console.log(millidelay)
+    await this.sleep(millidelay)
+  }
+  /* GROUP OBJECTS */
+  private groupObject(func: string[]){
 
   }
 
