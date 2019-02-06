@@ -40,6 +40,8 @@ export class EditorComponent implements OnInit {
   private speedVal: number;
   //array to keep track of all the indeces removed, used to calculate shift
   private removedIndices = new Array();
+  private delay_pop = 0;
+  private begin_index = 0;
 
   //IMPORTANT: SAVE OBJECTS IN DATA STRUCTURES
 
@@ -111,7 +113,7 @@ export class EditorComponent implements OnInit {
       } else if (call.match(/^(changeParam|moveRelative|scale|remove|push|pop|enqueue|dequeue|moveMarker)$/)) {
         this.targetCommands(func);
         //use commands that regulate rendering (excluding connectNodes)
-      } else if (call.match(/^(begin|delay|groupObject|connectNodes)$/)) {
+      } else if (call.match(/^(begin|end|delay|groupObject|connectNodes)$/)) {
         this.otherCommands(func);
       } else {
         this.isValid = false;
@@ -155,7 +157,7 @@ export class EditorComponent implements OnInit {
     if (shape == null) {
       return;
     } else {
-      if(this.map.has(name)){
+      if (this.map.has(name)) {
         this.isValid = false;
         this.errorOut = "ERROR: object with variable name, " + name + ", already exists [line " + this.line + "]";
         return;
@@ -177,23 +179,23 @@ export class EditorComponent implements OnInit {
   private targetCommands(func: string[]) {
     var call: string = func[0];
 
-    if(call === "changeParam"){
+    if (call === "changeParam") {
       this.changeParam(func);
-    }else if(call === "moveRelative"){
+    } else if (call === "moveRelative") {
       // this.moveRelative(func);
-    }else if(call === "scale"){
+    } else if (call === "scale") {
       // this.scale(func);
-    }else if(call === "remove"){
+    } else if (call === "remove") {
       this.remove(func);
-    }else if(call === "push"){
+    } else if (call === "push") {
 
-    }else if(call === "pop"){
+    } else if (call === "pop") {
 
-    }else if(call === "enqueue"){
+    } else if (call === "enqueue") {
 
-    }else if(call === "dequeue"){
+    } else if (call === "dequeue") {
 
-    }else if(call === "moveMarker"){
+    } else if (call === "moveMarker") {
 
     }
     this.canvas.renderAll();
@@ -204,12 +206,14 @@ export class EditorComponent implements OnInit {
   private otherCommands(func: string[]) {
     var call: string = func[0];
 
-    if(call == "begin"){
-
-    }else if(call == "delay"){
+    if (call === "begin") {
+      this.begin();
+    } else if (call === "delay") {
       this.delay(func);
-    }else if(call == "groupObject"){
+    } else if (call === "groupObject") {
       this.groupObject(func);
+    }else if (call === "end") {
+      this.end();
     }
 
   }
@@ -543,118 +547,118 @@ export class EditorComponent implements OnInit {
   /* TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS */
 
   /* CHANGE THE PARAMETERS */
-  private changeParam(func: string[]){
+  private changeParam(func: string[]) {
     var name = func[1];
 
-    if(1 > func.length - 1){
+    if (1 > func.length - 1) {
       this.isValid = false;
       this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + "[line " + this.line + "]";
       return;
-    }else{
-      if(this.map.get(func[1]) < 0){
+    } else {
+      if (this.map.get(func[1]) < 0) {
         this.isValid = false;
-        this.errorOut = "ERROR: Could not find target name, " + func[1] +  "[line "+ this.line + "]";
+        this.errorOut = "ERROR: Could not find target name, " + func[1] + "[line " + this.line + "]";
         return;
       }
       var shape = this.canvas.item(this.map.get(func[1]));
       console.log("index: " + this.map.get(func[1]) + " | " + shape);
 
     }
-    if(2 > func.length - 1){
+    if (2 > func.length - 1) {
       this.isValid = false;
       this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + "[line " + this.line + "]";
       return;
-    }else{
-      if(3 > func.length - 1){
+    } else {
+      if (3 > func.length - 1) {
         this.isValid = false;
         this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + "[line " + this.line + "]";
         return;
       }
       var change = func[3]
-      if(func[2] === "color"){
+      if (func[2] === "color") {
         console.log(change)
-        shape.set({stroke: change})
-      }else if(func[2] === "bkgrd" || func[2] === "textcolor"){
-        shape.set({fill: change})
-      }else if(func[2] === "text"){
-        if(shape.get('type') !== "text"){
+        shape.set({ stroke: change })
+      } else if (func[2] === "bkgrd" || func[2] === "textcolor") {
+        shape.set({ fill: change })
+      } else if (func[2] === "text") {
+        if (shape.get('type') !== "text") {
           this.isValid = false;
           this.errorOut = "ERROR: Incorrect type, expected text " + func[0] + "@" + name + "[line " + this.line + "]";
           return;
         }
         console.log("text change: " + change)
-        shape.set({text: change});
-      }else if(func[2] === "width"){
-        if(shape.get('type') === "text" || shape.get('type') === "polygon" || shape.get('type') === "line"){
+        shape.set({ text: change });
+      } else if (func[2] === "width") {
+        if (shape.get('type') === "text" || shape.get('type') === "polygon" || shape.get('type') === "line") {
           this.isValid = false;
           this.errorOut = "ERROR: Incorrect type, expected circle, rect, or oval" + func[0] + "@" + name + "[line " + this.line + "]";
           return;
         }
-        if(isNaN(parseFloat(change))){
+        if (isNaN(parseFloat(change))) {
           this.isValid = false;
           this.errorOut = "ERROR: Incorrect type, expected float or int" + func[0] + "@" + name + "[line " + this.line + "]";
           return;
         }
         console.log("width change: " + change)
-        if(shape.get('type') === "circle"){
-          shape.set({radius: parseFloat(change)/2});
-        }else{
-          shape.set({width: parseFloat(change)});
+        if (shape.get('type') === "circle") {
+          shape.set({ radius: parseFloat(change) / 2 });
+        } else {
+          shape.set({ width: parseFloat(change) });
         }
-      }else if(func[2] === "height"){
-        if(shape.get('type') === "text" || shape.get('type') === "polygon" || shape.get('type') === "line" || shape.get('type') === "circle"){
+      } else if (func[2] === "height") {
+        if (shape.get('type') === "text" || shape.get('type') === "polygon" || shape.get('type') === "line" || shape.get('type') === "circle") {
           this.isValid = false;
           this.errorOut = "ERROR: Incorrect type, expected rect or oval" + func[0] + "@" + name + "[line " + this.line + "]";
           return;
         }
-        if(isNaN(parseFloat(change))){
+        if (isNaN(parseFloat(change))) {
           this.isValid = false;
           this.errorOut = "ERROR: Incorrect type, expected float or int" + func[0] + "@" + name + "[line " + this.line + "]";
           return;
         }
         console.log("width change: " + change)
-        shape.set({height: parseFloat(change)});
-      }else if(func[2] === "point"){
-        if(shape.get('type') !== 'text'){
+        shape.set({ height: parseFloat(change) });
+      } else if (func[2] === "point") {
+        if (shape.get('type') !== 'text') {
           this.isValid = false;
           this.errorOut = "ERROR: Incorrect type, expected text " + func[0] + "@" + name + "[line " + this.line + "]";
           return;
         }
-        if(isNaN(parseFloat(change))){
+        if (isNaN(parseFloat(change))) {
           this.isValid = false;
           this.errorOut = "ERROR: Incorrect type, expected float or int" + func[0] + "@" + name + "[line " + this.line + "]";
           return;
         }
-        shape.set({fontSize: parseFloat(change)})
-      }else if(func[2] === "x"){
-        if(shape.get('type') === "polygon"){
+        shape.set({ fontSize: parseFloat(change) })
+      } else if (func[2] === "x") {
+        if (shape.get('type') === "polygon") {
           this.isValid = false;
           this.errorOut = "ERROR: Incorrect type, cannot take polygon" + func[0] + "@" + name + "[line " + this.line + "]";
           return;
         }
-        if(isNaN(parseFloat(change))){
+        if (isNaN(parseFloat(change))) {
           this.isValid = false;
           this.errorOut = "ERROR: Incorrect type, expected float or int" + func[0] + "@" + name + "[line " + this.line + "]";
           return;
         }
-        shape.set({left: parseFloat(change)})
-      }else if(func[2] === "y"){
-        if(shape.get('type') === "polygon"){
+        shape.set({ left: parseFloat(change) })
+      } else if (func[2] === "y") {
+        if (shape.get('type') === "polygon") {
           this.isValid = false;
           this.errorOut = "ERROR: Incorrect type, cannot take polygon" + func[0] + "@" + name + "[line " + this.line + "]";
           return;
         }
-        if(isNaN(parseFloat(change))){
+        if (isNaN(parseFloat(change))) {
           this.isValid = false;
           this.errorOut = "ERROR: Incorrect type, expected float or int" + func[0] + "@" + name + "[line " + this.line + "]";
           return;
         }
-        shape.set({top: parseFloat(change)})
-      }else if(func[2] === "xn"){
+        shape.set({ top: parseFloat(change) })
+      } else if (func[2] === "xn") {
         //continue work here
-      }else if(func[2] === "yn"){
+      } else if (func[2] === "yn") {
 
-      }else{
+      } else {
         this.isValid = false;
         this.errorOut = "ERROR: Could not understand parameter to be changed: " + func[0] + "@" + name + "[line " + this.line + "]";
         return;
@@ -662,30 +666,30 @@ export class EditorComponent implements OnInit {
     }
   }
   /* REMOVE A VALUE */
-  private remove(func: string[]){
-    if(1 > func.length-1){
+  private remove(func: string[]) {
+    if (1 > func.length - 1) {
       this.isValid = false;
       this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + func[0] + "[line " + this.line + "]";
       return;
-    }else{
+    } else {
       var removedItem = func[1];
-      if(this.map.has(removedItem)){
+      if (this.map.has(removedItem)) {
         var shift = 0;
         var number = this.map.get(removedItem);
-        for(var i = 0; i < this.removedIndices.length; i++){
-          if(this.removedIndices[i] < number){
+        for (var i = 0; i < this.removedIndices.length; i++) {
+          if (this.removedIndices[i] < number) {
             console.log(this.removedIndices[i] + " ? " + number);
             shift++;
           }
         }
         console.log("shift = " + shift);
-      }else{
+      } else {
         this.isValid = false;
         this.errorOut = "ERROR: Cannot find variable with name " + removedItem + "@" + func[0] + "[line " + this.line + "]";
         return;
       }
-      console.log(this.canvas.item(number-shift));
-      this.canvas.remove(this.canvas.item(number-shift));
+      console.log(this.canvas.item(number - shift));
+      this.canvas.remove(this.canvas.item(number - shift));
       this.removedIndices.push(number);
     }
 
@@ -693,21 +697,26 @@ export class EditorComponent implements OnInit {
 
   /* OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS */
 
-  /* NOT WORKING BUT DELAY */
-  async delay(func: string[]){
-    if(isNaN(parseFloat(func[1]))){
-      this.isValid = false;
-      this.errorOut = "ERROR: Incorrect type @ time (milliseconds) parameter [line " + this.line + "]";
-      return;
-    }
-    var millidelay = parseFloat(func[1])
-    console.log(millidelay)
-    await this.sleep(millidelay)
+  /* DELAY THE CALL */
+  private delay(func: string[]) {
+    this.delay_pop = 1;
   }
   /* GROUP OBJECTS */
-  private groupObject(func: string[]){
+  private groupObject(func: string[]) {
 
   }
+  /* BEGIN & END */
+  private begin(){
+    this.begin_index = 1;
+  }
+  private end(){
+    return;
+  }
+  /* MOVE RELATIVE TO AN OBJECT */
+  private moveRelative(func: string[]){
+    
+  }
+
 
   /*ON SUBMISSION FUNCTIONS | ON SUBMISSION FUNCTIONS | ON SUBMISSION FUNCTIONS | ON SUBMISSION FUNCTIONS*/
 
@@ -722,22 +731,91 @@ export class EditorComponent implements OnInit {
     this.errorOut = "";
     this.line = 0;
     this.index = 0;
+    this.delay_pop = 0;
     this.clearCanvas();
 
     var functions: string[] = this.userInput.split("\n").filter(Boolean);
     var cleaned: string;
+    var preclean = [];
     var milliseconds = this.displaySpeed * 1000;
     console.log(milliseconds);
-    //NOT COMPLETE: STOP THE CODE WHEN ERROR FOUND
-    for (var i = 0; i < functions.length; i++) {
-      cleaned = functions[i].trim();
-      this.line = i + 1;
-      this.readFunc(cleaned);
-      //break if error
-      if(!this.isValid){
-        break;
+
+    //pre-processing variables for begin-end statements
+    var BEGIN_END = [];
+    var preerror = 1;
+    var in_begin = 0;
+    var begin = 0;
+    var length = 0;
+    var numtoend = 0;
+
+    //pre-processing for delaying time
+    var DELAYS = [];
+    var delay_time = 0;
+    var delay_index = -1;
+
+
+
+    //pre-process
+    for (var precur = 0; precur < functions.length; precur++) {
+      preclean = functions[precur].trim().split(" ").filter(Boolean);
+      if (preclean[0] == "begin") {
+        if (in_begin == 1) {
+          this.isValid = false;
+          this.errorOut = "ERROR: Begin statement called before last finished [line " + preerror + "]";
+        }
+        //should identify that we're in a begin-end statment
+        in_begin = 1
+        //set the values that need to be started together to first line
+        begin = precur + 1;
+        console.log("begin identified @line" + precur);
       }
-      await this.sleep(milliseconds);
+      else if (preclean[0] == "end") {
+        if (in_begin == 0) {
+          this.isValid = false;
+          this.errorOut = "ERROR: End statement called before a begin statement started [line " + preerror + "]";
+        }
+        //set in_begin back to 0 to indicate we're out of a begin-end statement
+        in_begin = 0;
+        length = precur - begin;
+        BEGIN_END.unshift(length);
+        console.log("end identified @line" + precur);
+      }
+      else if (preclean[0] == "delay") {
+        if (isNaN(parseFloat(preclean[1]))) {
+          this.isValid = false;
+          this.errorOut = "ERROR: Incorrect type @ time (milliseconds) parameter [line " + preerror + "]";
+          ;
+        }
+        delay_index = precur;
+        delay_time = parseFloat(preclean[1]);
+        DELAYS.unshift(delay_time);
+      }
+    }
+
+    //process
+    if (this.isValid) {
+      for (var i = 0; i < functions.length; i++) {
+        cleaned = functions[i].trim();
+        this.line = i + 1;
+        this.readFunc(cleaned);
+        //break if error
+        if (!this.isValid) {
+          break;
+        }
+        if (this.delay_pop == 1) {
+          var delay_milli = DELAYS.pop()
+          await this.sleep(delay_milli);
+          this.delay_pop = 0;
+        }else if (this.begin_index == 1){
+          numtoend = BEGIN_END.pop();
+          console.log("pop value = " + numtoend);
+          this.begin_index = 0;
+        }else if (numtoend > 0){
+          numtoend--;
+        }else {
+          await this.sleep(milliseconds);
+        }
+      }
     }
     //if everything worked
     if (this.isValid) {
@@ -756,7 +834,7 @@ export class EditorComponent implements OnInit {
     this.map.clear();
   }
   //Shows the slider
-  showSlider(){
+  showSlider() {
     this.showSS = !this.showSS;
     this.displaySpeed = this.speedVal;
   }
