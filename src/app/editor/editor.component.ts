@@ -182,7 +182,7 @@ export class EditorComponent implements OnInit {
     if (call === "changeParam") {
       this.changeParam(func);
     } else if (call === "moveRelative") {
-      // this.moveRelative(func);
+      this.moveRelative(func);
     } else if (call === "scale") {
       // this.scale(func);
     } else if (call === "remove") {
@@ -212,7 +212,7 @@ export class EditorComponent implements OnInit {
       this.delay(func);
     } else if (call === "groupObject") {
       this.groupObject(func);
-    }else if (call === "end") {
+    } else if (call === "end") {
       this.end();
     }
 
@@ -548,7 +548,7 @@ export class EditorComponent implements OnInit {
 
   /* CHANGE THE PARAMETERS */
   private changeParam(func: string[]) {
-    var name = func[1];
+    var name;
 
     if (1 > func.length - 1) {
       this.isValid = false;
@@ -560,7 +560,8 @@ export class EditorComponent implements OnInit {
         this.errorOut = "ERROR: Could not find target name, " + func[1] + "[line " + this.line + "]";
         return;
       }
-      var shape = this.canvas.item(this.map.get(func[1]));
+      name = func[1];
+      var shape = this.canvas.item(this.map.get(name));
       console.log("index: " + this.map.get(func[1]) + " | " + shape);
 
     }
@@ -706,15 +707,55 @@ export class EditorComponent implements OnInit {
 
   }
   /* BEGIN & END */
-  private begin(){
+  private begin() {
     this.begin_index = 1;
   }
-  private end(){
+  private end() {
     return;
   }
   /* MOVE RELATIVE TO AN OBJECT */
-  private moveRelative(func: string[]){
-    
+
+  private moveRelative(func: string[]) {
+    if (1 > func.length - 1) { //target
+      this.isValid = false;
+      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + "[line " + this.line + "]";
+      return;
+    } else {
+      if (this.map.get(func[1]) < 0) {
+        this.isValid = false;
+        this.errorOut = "ERROR: Could not find target name, " + func[1] + "[line " + this.line + "]";
+        return;
+      }
+      var shape = this.canvas.item(this.map.get(func[1]));
+      console.log("index: " + this.map.get(func[1]) + " | " + shape);
+
+    }
+    if (2 <= func.length - 1) { // x-offset
+      if (isNaN(parseFloat(func[2]))) {
+        this.isValid = false;
+        this.errorOut = "ERROR: Incorrect type @ x-offset parameter [line " + this.line + "]";
+        return;
+      }
+      var x_shift = '+=' + parseFloat(func[2]);
+      shape.animate('left', x_shift, { onChange: this.canvas.renderAll.bind(this.canvas)});
+    } else {
+      this.isValid = false;
+      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function [line " + this.line + "]";
+      return;
+    }
+    if (3 <= func.length - 1) { // y-position
+      if (isNaN(parseFloat(func[3]))) {
+        this.isValid = false;
+        this.errorOut = "ERROR: Incorrect type @ y-offsset parameter [line " + this.line + "]";
+        return;
+      }
+      var y_shift = '+=' + parseFloat(func[3]);
+      shape.animate('top', y_shift, {onChange: this.canvas.renderAll.bind(this.canvas) });
+    } else {
+      this.isValid = false;
+      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function [line " + this.line + "]";
+      return;
+    }
   }
 
 
@@ -728,7 +769,7 @@ export class EditorComponent implements OnInit {
     //variable functions name is confusing
     this.hasSubmit = false;
     this.isValid = true;
-    this.errorOut = "";
+    this.errorOut="";
     this.line = 0;
     this.index = 0;
     this.delay_pop = 0;
@@ -806,13 +847,13 @@ export class EditorComponent implements OnInit {
           var delay_milli = DELAYS.pop()
           await this.sleep(delay_milli);
           this.delay_pop = 0;
-        }else if (this.begin_index == 1){
+        } else if (this.begin_index == 1) {
           numtoend = BEGIN_END.pop();
           console.log("pop value = " + numtoend);
           this.begin_index = 0;
-        }else if (numtoend > 0){
+        } else if (numtoend > 0) {
           numtoend--;
-        }else {
+        } else {
           await this.sleep(milliseconds);
         }
       }
