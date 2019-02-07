@@ -736,7 +736,14 @@ export class EditorComponent implements OnInit {
         this.errorOut = "ERROR: Incorrect type @ x-offset parameter [line " + this.line + "]";
         return;
       }
-      var x_shift = '+=' + parseFloat(func[2]);
+      var x_shift: string;
+      var x_shift_val = parseFloat(func[2]);
+      if(x_shift_val < 0){
+        x_shift_val = x_shift_val * -1;
+        x_shift = '-=' + x_shift_val;
+      }else{
+        x_shift = '+=' + x_shift_val;
+      }
       shape.animate('left', x_shift, { onChange: this.canvas.renderAll.bind(this.canvas)});
     } else {
       this.isValid = false;
@@ -749,8 +756,16 @@ export class EditorComponent implements OnInit {
         this.errorOut = "ERROR: Incorrect type @ y-offsset parameter [line " + this.line + "]";
         return;
       }
-      var y_shift = '+=' + parseFloat(func[3]);
-      shape.animate('top', y_shift, {onChange: this.canvas.renderAll.bind(this.canvas) });
+      var y_shift: string;
+      var y_shift_val = parseFloat(func[3])
+      if(parseFloat(func[3]) < 0){
+        y_shift_val = y_shift_val * -1;
+        y_shift = '-=' + y_shift_val;
+      }else{
+        y_shift = '+=' + y_shift_val;
+      }
+      shape.animate('top', y_shift, {onChange: this.canvas.renderAll.bind(this.canvas)});
+
     } else {
       this.isValid = false;
       this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function [line " + this.line + "]";
