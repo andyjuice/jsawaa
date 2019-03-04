@@ -704,6 +704,49 @@ export class EditorComponent implements OnInit {
   }
   /* GROUP OBJECTS */
   private groupObject(func: string[]) {
+    var group_shapes = [];
+    var name = func[1];
+    var total_objects;
+
+    if (2 <= func.length - 1) {
+      if (isNaN(parseFloat(func[2]))) {
+        this.isValid = false;
+        this.errorOut = "ERROR: Incorrect type @ n (number of shapes) parameter [line " + this.line + "]";
+        return;
+      }
+      total_objects = parseFloat(func[2]);
+
+    } else {
+      this.isValid = false;
+      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function [line " + this.line + "]";
+      return;
+    }
+
+    for (var i = 3; i < total_objects + 3; i++) {
+
+      if (i <= func.length - 1) {
+        if (this.map.has(func[i])) {
+          var number = this.map.get(func[i]);
+          group_shapes.push(this.canvas.item(number));
+
+        } else {
+          this.isValid = false;
+          this.errorOut = "ERROR: Cannot find variable with name " + func[i] + "@" + func[0] + "[line " + this.line + "]";
+          return;
+        }
+
+      } else {
+        this.isValid = false;
+        this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function [line " + this.line + "]";
+        return;
+      }
+    }
+
+    if(0 < group_shapes.length){
+      var group = new fabric.Group(group_shapes);
+      group.set('selectable', false);
+      this.canvas.add(group);
+    }
 
   }
   /* BEGIN & END */
@@ -738,13 +781,13 @@ export class EditorComponent implements OnInit {
       }
       var x_shift: string;
       var x_shift_val = parseFloat(func[2]);
-      if(x_shift_val < 0){
+      if (x_shift_val < 0) {
         x_shift_val = x_shift_val * -1;
         x_shift = '-=' + x_shift_val;
-      }else{
+      } else {
         x_shift = '+=' + x_shift_val;
       }
-      shape.animate('left', x_shift, { onChange: this.canvas.renderAll.bind(this.canvas)});
+      shape.animate('left', x_shift, { onChange: this.canvas.renderAll.bind(this.canvas) });
     } else {
       this.isValid = false;
       this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function [line " + this.line + "]";
@@ -758,13 +801,13 @@ export class EditorComponent implements OnInit {
       }
       var y_shift: string;
       var y_shift_val = parseFloat(func[3])
-      if(parseFloat(func[3]) < 0){
+      if (parseFloat(func[3]) < 0) {
         y_shift_val = y_shift_val * -1;
         y_shift = '-=' + y_shift_val;
-      }else{
+      } else {
         y_shift = '+=' + y_shift_val;
       }
-      shape.animate('top', y_shift, {onChange: this.canvas.renderAll.bind(this.canvas)});
+      shape.animate('top', y_shift, { onChange: this.canvas.renderAll.bind(this.canvas) });
 
     } else {
       this.isValid = false;
@@ -784,7 +827,7 @@ export class EditorComponent implements OnInit {
     //variable functions name is confusing
     this.hasSubmit = false;
     this.isValid = true;
-    this.errorOut="";
+    this.errorOut = "";
     this.line = 0;
     this.index = 0;
     this.delay_pop = 0;
@@ -871,6 +914,7 @@ export class EditorComponent implements OnInit {
         } else {
           await this.sleep(milliseconds);
         }
+        console.log(this.map);
       }
     }
     //if everything worked
