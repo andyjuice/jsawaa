@@ -746,6 +746,7 @@ export class EditorComponent implements OnInit {
       var group = new fabric.Group(group_shapes);
       group.set('selectable', false);
       this.canvas.add(group);
+      this.map.add(group);
     }
 
   }
