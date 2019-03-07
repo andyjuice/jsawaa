@@ -184,7 +184,7 @@ export class EditorComponent implements OnInit {
     } else if (call === "moveRelative") {
       this.moveRelative(func);
     } else if (call === "scale") {
-      // this.scale(func);
+      this.scale(func);
     } else if (call === "remove") {
       this.remove(func);
     } else if (call === "push") {
@@ -547,7 +547,7 @@ export class EditorComponent implements OnInit {
   /* TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS | TARGETING RENDERED OBJECTS */
 
   /* CHANGE THE PARAMETERS */
-  private changeParam(func: string[]) {
+  private changeParam(func: string[]): any {
     var name;
 
     if (1 > func.length - 1) {
@@ -667,7 +667,7 @@ export class EditorComponent implements OnInit {
     }
   }
   /* REMOVE A VALUE */
-  private remove(func: string[]) {
+  private remove(func: string[]): any {
     if (1 > func.length - 1) {
       this.isValid = false;
       this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + func[0] + "[line " + this.line + "]";
@@ -693,6 +693,45 @@ export class EditorComponent implements OnInit {
       this.canvas.remove(this.canvas.item(number - shift));
       this.removedIndices.push(number);
     }
+
+  }
+  private scale(func: string[]): any {
+    var doesExist = false;
+    var index = null;
+    var scale;
+
+    if (1 <= func.length - 1) {
+      if (this.map.has(func[1])) {
+        var number = this.map.get(func[1]);
+        this.canvas.item(number);
+
+      } else {
+        this.isValid = false;
+        this.errorOut = "ERROR: Cannot find variable with name " + func[1] + "@" + func[0] + "[line " + this.line + "]";
+        return;
+      }
+
+    } else {
+      this.isValid = false;
+      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function [line " + this.line + "]";
+      return;
+    }
+
+    if (2 <= func.length - 1 && doesExist) {
+      if (isNaN(parseFloat(func[1]))) {
+        this.isValid = false;
+        this.errorOut = "ERROR: Incorrect type @ n (number of shapes) parameter [line " + this.line + "]";
+        return;
+      }
+      scale = parseFloat(func[1]) / 100;
+
+
+    } else {
+      this.isValid = false;
+      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function [line " + this.line + "]";
+      return;
+    }
+
 
   }
 
@@ -742,11 +781,12 @@ export class EditorComponent implements OnInit {
       }
     }
 
-    if(0 < group_shapes.length){
+    if (0 < group_shapes.length) {
       var group = new fabric.Group(group_shapes);
       group.set('selectable', false);
       this.canvas.add(group);
-      this.map.add(group);
+      this.map.set(group, this.index);
+      this.index++;
     }
 
   }
