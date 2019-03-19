@@ -17,31 +17,31 @@ var HashMap = require('hashmap');
 export class EditorComponent implements OnInit {
   @ViewChild('rMatCard') rightMC: ElementRef;
   //canvas element
-  private canvas: any;
+  public canvas: any;
   //potentially problematic
-  private userInput: string = "";
+  public userInput: string = "";
   //error message
-  private errorOut: string;
+  public errorOut: string;
   //whether there is an error or not
-  private isValid: boolean = null;
+  public isValid: boolean = null;
   //whether user has submitted or not
-  private hasSubmit: boolean = false;
+  public hasSubmit: boolean = false;
   //map to store objects' names to their index in the canvas element
-  private map = new HashMap();
+  public map = new HashMap();
   //index in hashmap of each object
-  private index = 0;
+  public index = 0;
   //line number of each call
-  private line = 1;
+  public line = 1;
   //speed slider display
-  private showSS = false;
+  public showSS = false;
   // intial speed & used for determining delay
-  private displaySpeed = 0.5;
+  public displaySpeed = 0.5;
   //speed slider curr value
-  private speedVal: number;
+  public speedVal: number;
   //array to keep track of all the indeces removed, used to calculate shift
-  private removedIndices = new Array();
-  private delay_pop = 0;
-  private begin_index = 0;
+  public removedIndices = new Array();
+  public delay_pop = 0;
+  public begin_index = 0;
 
   //IMPORTANT: SAVE OBJECTS IN DATA STRUCTURES
 
