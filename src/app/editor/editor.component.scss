@@ -1,0 +1,62 @@
+
+/* LINEBREAKS TBD WHETHER WE KEEP OR NOT */
+.angular-linebreaks{
+  white-space: pre-wrap;
+}
+mat-card{
+  width: 90%;
+  height: 95%;
+  min-width: 250px;
+  max-height: 650px;
+  margin: auto;
+}
+
+.card_div{
+  width: 100%;
+  height: 100%;
+  max-height: 600px;
+}
+.row {
+  display: flex;
+  height: 100%;
+}
+
+.column_left {
+  flex: 40%;
+}
+.column_right{
+  flex: 60%;
+}
+
+canvas{
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+
+}
+.clear_button{
+  margin-left: 10px;
+}
+
+.red{
+  border-left: 5px solid red;
+  background-color: #ffcccc;
+  padding: 4px;
+;
+}
+.green{
+  border-left: 5px solid green;
+  background-color: #ccffcc;
+  padding: 4px;
+}
+.speed_slider{
+  margin-left: 10px;
+}
+::ng-deep .mat-accent .mat-slider-thumb {
+    background-color: #87CEEB;
+}
+::ng-deep .mat-accent .mat-slider-thumb-label {
+    background-color: #87CEEB;
+}
+::ng-deep .mat-accent .mat-slider-track-fill {
+    background-color: #87CEEB;
+}

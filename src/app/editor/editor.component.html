@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="column_left">
+    <mat-card>
+      <ace-editor [(ngModel)]="userInput" style="height:500px; width:auto"></ace-editor>
+
+      <br />
+      <button mat-stroked-button (click)="onSubmit()">Run Code</button>
+      <button mat-stroked-button class="clear_button" (click)="clearCanvas()">Clear Canvas</button>
+      <button mat-stroked-button class="clear_button" (click)="showSlider()" *ngIf="!this.showSS">Step Speed</button>
+      <mat-slider class="speed_slider" style="color:#007FFF" *ngIf="this.showSS" thumbLabel [displayWith]="formatLabel" [max]=5 [min]=0.25 [step]=0.25 [tickInterval]=0.5 [(ngModel)]="speedVal">
+      </mat-slider>
+      <button mat-button style="color:#007FFF" (click)="showSlider()" *ngIf="this.showSS">OK</button>
+    </mat-card>
+  </div>
+  <div (window:resize)="onResize()" class="column_right" #rColumn>
+    <mat-card>
+      <p class="angular-linebreaks" *ngIf="this.hasSubmit" [ngClass]="{'red': !this.isValid, 'green': this.isValid}">
+        {{errorOut}}
+      </p>
+      <div class=card_div #rMatCard>
+        <div #canvasContainer>
+          <canvas id=canvas></canvas>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
