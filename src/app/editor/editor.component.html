@@ -1,27 +1,52 @@
-<div class="row">
-  <div class="column_left">
-    <mat-card>
-      <ace-editor [(ngModel)]="userInput" style="height:500px; width:auto"></ace-editor>
+<mat-sidenav-container fullscreen>
 
-      <br />
-      <button mat-stroked-button (click)="onSubmit()">Run Code</button>
-      <button mat-stroked-button class="clear_button" (click)="clearCanvas()">Clear Canvas</button>
-      <button mat-stroked-button class="clear_button" (click)="showSlider()" *ngIf="!this.showSS">Step Speed</button>
-      <mat-slider class="speed_slider" style="color:#007FFF" *ngIf="this.showSS" thumbLabel [displayWith]="formatLabel" [max]=5 [min]=0.25 [step]=0.25 [tickInterval]=0.5 [(ngModel)]="speedVal">
-      </mat-slider>
-      <button mat-button style="color:#007FFF" (click)="showSlider()" *ngIf="this.showSS">OK</button>
-    </mat-card>
-  </div>
-  <div (window:resize)="onResize()" class="column_right" #rColumn>
-    <mat-card>
-      <p class="angular-linebreaks" *ngIf="this.hasSubmit" [ngClass]="{'red': !this.isValid, 'green': this.isValid}">
-        {{errorOut}}
-      </p>
-      <div class=card_div #rMatCard>
-        <div #canvasContainer>
-          <canvas id=canvas></canvas>
+  <mat-sidenav #sidenav mode="side" [(opened)]="opened"></mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar style="background-color:#007FFF; color:white;">
+      <!-- <div id="menu-button"> -->
+        <button mat-button (click)="sidenav.toggle()" class="rotate">
+          <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+          width="36" height="36"
+          viewBox="0 0 192 192"
+          style=" fill:#000000;"><g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,192v-192h192v192z" fill="none"></path><g fill="#ffffff"><path d="M24,40c-2.88509,-0.0408 -5.56865,1.475 -7.0231,3.96698c-1.45445,2.49198 -1.45445,5.57405 0,8.06603c1.45445,2.49198 4.13801,4.00779 7.0231,3.96698h144c2.88509,0.0408 5.56865,-1.475 7.0231,-3.96698c1.45445,-2.49198 1.45445,-5.57405 0,-8.06603c-1.45445,-2.49198 -4.13801,-4.00779 -7.0231,-3.96698zM24,88c-2.88509,-0.0408 -5.56865,1.475 -7.0231,3.96698c-1.45445,2.49198 -1.45445,5.57405 0,8.06603c1.45445,2.49198 4.13801,4.00779 7.0231,3.96698h144c2.88509,0.0408 5.56865,-1.475 7.0231,-3.96698c1.45445,-2.49198 1.45445,-5.57405 0,-8.06603c-1.45445,-2.49198 -4.13801,-4.00779 -7.0231,-3.96698zM24,136c-2.88509,-0.0408 -5.56865,1.475 -7.0231,3.96698c-1.45445,2.49198 -1.45445,5.57405 0,8.06603c1.45445,2.49198 4.13801,4.00779 7.0231,3.96698h144c2.88509,0.0408 5.56865,-1.475 7.0231,-3.96698c1.45445,-2.49198 1.45445,-5.57405 0,-8.06603c-1.45445,-2.49198 -4.13801,-4.00779 -7.0231,-3.96698z"></path></g></g></svg>
+        </button>
+        <div style="heigt:100%; width:100%">
+          <img src="assets/img/title.png" style="height:60px; float:right;">
         </div>
+      <!-- </div> -->
+      <!-- <div id="title"> -->
+      <!-- <img src="assets/img/cat.png" style="height:45px"> -->
+      <!-- <h1>avaScript and Web-Based Algorithm Animation (JSAWAA)</h1> -->
+      <!-- </div> -->
+    </mat-toolbar>
+    <br />
+    <div class="row">
+      <div class="column_left">
+        <mat-card>
+          <ace-editor [(ngModel)]="userInput" style="height:500px; width:auto"></ace-editor>
+
+          <br />
+          <button mat-stroked-button (click)="onSubmit()">Run Code</button>
+          <button mat-stroked-button class="clear_button" (click)="clearCanvas()">Clear Canvas</button>
+          <button mat-stroked-button class="clear_button" (click)="showSlider()" *ngIf="!this.showSS">Step Speed</button>
+          <mat-slider class="speed_slider" style="color:#007FFF" *ngIf="this.showSS" thumbLabel [displayWith]="formatLabel" [max]=5 [min]=0.25 [step]=0.25 [tickInterval]=0.5 [(ngModel)]="speedVal">
+          </mat-slider>
+          <button mat-button style="color:#007FFF" (click)="showSlider()" *ngIf="this.showSS">OK</button>
+        </mat-card>
       </div>
-    </mat-card>
-  </div>
-</div>
+      <div (window:resize)="onResize()" class="column_right" #rColumn>
+        <mat-card>
+          <p class="angular-linebreaks" *ngIf="this.hasSubmit" [ngClass]="{'red': !this.isValid, 'green': this.isValid}">
+            {{errorOut}}
+          </p>
+          <div class=card_div #rMatCard>
+            <div #canvasContainer>
+              <canvas id=canvas></canvas>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -936,7 +936,7 @@ export class EditorComponent implements OnInit {
     if (this.isValid) {
       for (var i = 0; i < functions.length; i++) {
         cleaned = functions[i].trim();
-        this.line = i + 1;
+        this.line = this.line + 1;
         this.readFunc(cleaned);
         //break if error
         if (!this.isValid) {

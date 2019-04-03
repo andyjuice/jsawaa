@@ -5,16 +5,15 @@
 }
 mat-card{
   width: 90%;
-  height: 95%;
-  min-width: 250px;
-  max-height: 650px;
+  height: 82.5%;
+  min-width: 350px;
+  min-height: 550px;
   margin: auto;
 }
 
 .card_div{
   width: 100%;
   height: 100%;
-  max-height: 600px;
 }
 .row {
   display: flex;
@@ -29,7 +28,7 @@ mat-card{
 }
 
 canvas{
-  border: 1px solid lightgrey;
+  border: 0.5px solid lightblue;
   border-radius: 5px;
 
 }
@@ -59,4 +58,28 @@ canvas{
 }
 ::ng-deep .mat-accent .mat-slider-track-fill {
     background-color: #87CEEB;
+}
+mat-toolbar{
+  overflow:visible !important;
+}
+
+.logo{
+  max-width: 10%;
+}
+.brand{
+  max-width: 90%;
+}
+#title{
+  float: right !important;
+}
+mat-sidenav{
+  width: 250px;
+}
+.rotate:focus i {
+  animation: rotate 1s ease-in-out 0s;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(90deg); }
 }
