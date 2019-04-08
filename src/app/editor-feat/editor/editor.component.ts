@@ -43,6 +43,17 @@ export class EditorComponent implements OnInit {
   public delay_pop = 0;
   public begin_index = 0;
 
+  public getshift(num: number) {
+    var shift = 0;
+    for (var i = 0; i < this.removedIndices.length; i++) {
+      if (num > this.removedIndices[i]) {
+        shift++;
+      }
+    }
+    console.log("shift = " + (num - shift));
+    return shift;
+  }
+
   //IMPORTANT: SAVE OBJECTS IN DATA STRUCTURES
 
   /* CONSTRCTOR & INIT */
@@ -95,7 +106,7 @@ export class EditorComponent implements OnInit {
           }
         }
         func.filter(Boolean);
-        console.log(func);
+        // console.log(func);
       } else {
         func = f.split(" ").filter(Boolean);
       }
@@ -561,8 +572,9 @@ export class EditorComponent implements OnInit {
         return;
       }
       name = func[1];
-      var shape = this.canvas.item(this.map.get(name));
-      console.log("index: " + this.map.get(func[1]) + " | " + shape);
+      var opos = this.map.get(func[1]);
+      var shape = this.canvas.item(opos - this.getshift(opos));
+      console.log("index: " + (opos - this.getshift(opos)) + " | " + shape);
 
     }
     if (2 > func.length - 1) {
@@ -675,14 +687,8 @@ export class EditorComponent implements OnInit {
     } else {
       var removedItem = func[1];
       if (this.map.has(removedItem)) {
-        var shift = 0;
-        var number = this.map.get(removedItem);
-        for (var i = 0; i < this.removedIndices.length; i++) {
-          if (this.removedIndices[i] < number) {
-            console.log(this.removedIndices[i] + " ? " + number);
-            shift++;
-          }
-        }
+        var number = this.map.get(removedItem)
+        var shift = this.getshift(number);
         console.log("shift = " + shift);
       } else {
         this.isValid = false;
@@ -695,15 +701,18 @@ export class EditorComponent implements OnInit {
     }
 
   }
+  /* SCALE SHAPE OR OBJECT—incomplete*/
   private scale(func: string[]): any {
+    var shape;
     var doesExist = false;
     var index = null;
     var scale;
 
     if (1 <= func.length - 1) {
       if (this.map.has(func[1])) {
+        doesExist = true;
         var number = this.map.get(func[1]);
-        this.canvas.item(number);
+        shape = this.canvas.item(number - this.getshift(number));
 
       } else {
         this.isValid = false;
@@ -724,6 +733,11 @@ export class EditorComponent implements OnInit {
         return;
       }
       scale = parseFloat(func[1]) / 100;
+      shape.set({
+        scaleY: shape.height * scale,
+        scaleX: shape.width * scale
+      });
+
 
 
     } else {
@@ -733,6 +747,65 @@ export class EditorComponent implements OnInit {
     }
 
 
+  }
+  /* MOVE RELATIVE TO AN OBJECT */
+  private moveRelative(func: string[]) {
+    if (1 > func.length - 1) { //target
+      this.isValid = false;
+      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + "[line " + this.line + "]";
+      return;
+    } else {
+      if (this.map.get(func[1]) < 0) {
+        this.isValid = false;
+        this.errorOut = "ERROR: Could not find target name, " + func[1] + "[line " + this.line + "]";
+        return;
+      }
+      var opos = this.map.get(func[1]);
+      var shape = this.canvas.item(opos - this.getshift(opos));
+      console.log("index: " + (opos - this.getshift(opos)) + " | " + shape);
+
+    }
+    if (2 <= func.length - 1) { // x-offset
+      if (isNaN(parseFloat(func[2]))) {
+        this.isValid = false;
+        this.errorOut = "ERROR: Incorrect type @ x-offset parameter [line " + this.line + "]";
+        return;
+      }
+      var x_shift: string;
+      var x_shift_val = parseFloat(func[2]);
+      if (x_shift_val < 0) {
+        x_shift_val = x_shift_val * -1;
+        x_shift = '-=' + x_shift_val;
+      } else {
+        x_shift = '+=' + x_shift_val;
+      }
+      shape.animate('left', x_shift, { onChange: this.canvas.renderAll.bind(this.canvas) });
+    } else {
+      this.isValid = false;
+      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function [line " + this.line + "]";
+      return;
+    }
+    if (3 <= func.length - 1) { // y-position
+      if (isNaN(parseFloat(func[3]))) {
+        this.isValid = false;
+        this.errorOut = "ERROR: Incorrect type @ y-offsset parameter [line " + this.line + "]";
+        return;
+      }
+      var y_shift: string;
+      var y_shift_val = parseFloat(func[3])
+      if (parseFloat(func[3]) < 0) {
+        y_shift_val = y_shift_val * -1;
+        y_shift = '-=' + y_shift_val;
+      } else {
+        y_shift = '+=' + y_shift_val;
+      }
+      shape.animate('top', y_shift, { onChange: this.canvas.renderAll.bind(this.canvas) });
+
+    } else {
+      this.isValid = false;
+      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function [line " + this.line + "]";
+      return;
+    }
   }
 
   /* OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS | OTHER COMMANDS */
@@ -797,65 +870,7 @@ export class EditorComponent implements OnInit {
   private end() {
     return;
   }
-  /* MOVE RELATIVE TO AN OBJECT */
 
-  private moveRelative(func: string[]) {
-    if (1 > func.length - 1) { //target
-      this.isValid = false;
-      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + "[line " + this.line + "]";
-      return;
-    } else {
-      if (this.map.get(func[1]) < 0) {
-        this.isValid = false;
-        this.errorOut = "ERROR: Could not find target name, " + func[1] + "[line " + this.line + "]";
-        return;
-      }
-      var shape = this.canvas.item(this.map.get(func[1]));
-      console.log("index: " + this.map.get(func[1]) + " | " + shape);
-
-    }
-    if (2 <= func.length - 1) { // x-offset
-      if (isNaN(parseFloat(func[2]))) {
-        this.isValid = false;
-        this.errorOut = "ERROR: Incorrect type @ x-offset parameter [line " + this.line + "]";
-        return;
-      }
-      var x_shift: string;
-      var x_shift_val = parseFloat(func[2]);
-      if (x_shift_val < 0) {
-        x_shift_val = x_shift_val * -1;
-        x_shift = '-=' + x_shift_val;
-      } else {
-        x_shift = '+=' + x_shift_val;
-      }
-      shape.animate('left', x_shift, { onChange: this.canvas.renderAll.bind(this.canvas) });
-    } else {
-      this.isValid = false;
-      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function [line " + this.line + "]";
-      return;
-    }
-    if (3 <= func.length - 1) { // y-position
-      if (isNaN(parseFloat(func[3]))) {
-        this.isValid = false;
-        this.errorOut = "ERROR: Incorrect type @ y-offsset parameter [line " + this.line + "]";
-        return;
-      }
-      var y_shift: string;
-      var y_shift_val = parseFloat(func[3])
-      if (parseFloat(func[3]) < 0) {
-        y_shift_val = y_shift_val * -1;
-        y_shift = '-=' + y_shift_val;
-      } else {
-        y_shift = '+=' + y_shift_val;
-      }
-      shape.animate('top', y_shift, { onChange: this.canvas.renderAll.bind(this.canvas) });
-
-    } else {
-      this.isValid = false;
-      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function [line " + this.line + "]";
-      return;
-    }
-  }
 
 
   /*ON SUBMISSION FUNCTIONS | ON SUBMISSION FUNCTIONS | ON SUBMISSION FUNCTIONS | ON SUBMISSION FUNCTIONS*/
@@ -898,6 +913,7 @@ export class EditorComponent implements OnInit {
     //pre-process
     for (var precur = 0; precur < functions.length; precur++) {
       preclean = functions[precur].trim().split(" ").filter(Boolean);
+      console.log(preclean);
       if (preclean[0] == "begin") {
         if (in_begin == 1) {
           this.isValid = false;

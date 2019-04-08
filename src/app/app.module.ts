@@ -7,7 +7,7 @@ import { MatInputModule, MatCardModule, MatButtonModule, MatToolbarModule, MatSl
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { EditorComponent } from './editor/editor.component';
+import { EditorComponent } from './editor-feat/editor/editor.component';
 import { AceEditorModule} from 'ng2-ace-editor';
 import { HeaderComponent } from './header/header.component';
 

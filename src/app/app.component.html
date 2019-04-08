@@ -1,4 +1,31 @@
 <!--<app-header></app-header>-->
 <main>
-  <app-editor></app-editor>
+  <mat-sidenav-container fullscreen>
+    <mat-sidenav #sidenav mode="side" [(opened)]="opened">
+      <button routerLink="/editor">editor</button>
+      <button routerLink="/documentation">doc</button>
+
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <mat-toolbar style="background-color:#007FFF; color:white;">
+        <button mat-button (click)="sidenav.toggle()" class="rotate">
+          <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="36" height="36" viewBox="0 0 192 192" style=" fill:#000000;">
+            <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none"
+              text-anchor="none" style="mix-blend-mode: normal">
+              <path d="M0,192v-192h192v192z" fill="none"></path>
+              <g fill="#ffffff">
+                <path d="M24,40c-2.88509,-0.0408 -5.56865,1.475 -7.0231,3.96698c-1.45445,2.49198 -1.45445,5.57405 0,8.06603c1.45445,2.49198 4.13801,4.00779 7.0231,3.96698h144c2.88509,0.0408 5.56865,-1.475 7.0231,-3.96698c1.45445,-2.49198 1.45445,-5.57405 0,-8.06603c-1.45445,-2.49198 -4.13801,-4.00779 -7.0231,-3.96698zM24,88c-2.88509,-0.0408 -5.56865,1.475 -7.0231,3.96698c-1.45445,2.49198 -1.45445,5.57405 0,8.06603c1.45445,2.49198 4.13801,4.00779 7.0231,3.96698h144c2.88509,0.0408 5.56865,-1.475 7.0231,-3.96698c1.45445,-2.49198 1.45445,-5.57405 0,-8.06603c-1.45445,-2.49198 -4.13801,-4.00779 -7.0231,-3.96698zM24,136c-2.88509,-0.0408 -5.56865,1.475 -7.0231,3.96698c-1.45445,2.49198 -1.45445,5.57405 0,8.06603c1.45445,2.49198 4.13801,4.00779 7.0231,3.96698h144c2.88509,0.0408 5.56865,-1.475 7.0231,-3.96698c1.45445,-2.49198 1.45445,-5.57405 0,-8.06603c-1.45445,-2.49198 -4.13801,-4.00779 -7.0231,-3.96698z"></path>
+              </g>
+            </g>
+          </svg>
+        </button>
+        <div style="heigt:100%; width:100%">
+          <img src="assets/img/title.png" style="height:60px; float:right;">
+        </div>
+      </mat-toolbar>
+      <app-editor></app-editor>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
 </main>
