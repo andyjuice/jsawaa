@@ -678,6 +678,7 @@ export class EditorComponent implements OnInit {
       }
     }
   }
+
   /* REMOVE A VALUE */
   private remove(func: string[]): any {
     if (1 > func.length - 1) {
@@ -701,6 +702,7 @@ export class EditorComponent implements OnInit {
     }
 
   }
+
   /* SCALE SHAPE OR OBJECT—incomplete*/
   private scale(func: string[]): any {
     var shape;
@@ -746,6 +748,7 @@ export class EditorComponent implements OnInit {
 
 
   }
+
   /* MOVE RELATIVE TO AN OBJECT */
   private moveRelative(func: string[]) {
     if (1 > func.length - 1) { //target
@@ -812,6 +815,7 @@ export class EditorComponent implements OnInit {
   private delay(func: string[]) {
     this.delay_pop = 1;
   }
+
   /* GROUP OBJECTS */
   private groupObject(func: string[]) {
     var group_shapes = [];
@@ -861,6 +865,7 @@ export class EditorComponent implements OnInit {
     }
 
   }
+
   /* BEGIN & END */
   private begin() {
     this.begin_index = 1;
@@ -981,7 +986,8 @@ export class EditorComponent implements OnInit {
       console.log(key + " : " + value);
     });
   }
-  /* BUTTON FUNCS */
+
+  /* BUTTON FUNCS | BUTTON FUNCS | BUTTON FUNCS | BUTTON FUNCS */
 
   //Clears the canvas
   clearCanvas() {
