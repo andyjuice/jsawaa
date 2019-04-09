@@ -841,7 +841,8 @@ export class EditorComponent implements OnInit {
       if (i <= func.length - 1) {
         if (this.map.has(func[i])) {
           var number = this.map.get(func[i]);
-          group_shapes.push(this.canvas.item(number));
+          var shift = this.getshift(number);
+          group_shapes.push(this.canvas.item(number - shift));
 
         } else {
           this.isValid = false;
@@ -860,7 +861,7 @@ export class EditorComponent implements OnInit {
       var group = new fabric.Group(group_shapes);
       group.set('selectable', false);
       this.canvas.add(group);
-      this.map.set(group, this.index);
+      this.map.set(name, this.index);
       this.index++;
     }
 
