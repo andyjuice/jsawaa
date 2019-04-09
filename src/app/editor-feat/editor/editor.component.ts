@@ -716,33 +716,31 @@ export class EditorComponent implements OnInit {
 
       } else {
         this.isValid = false;
-        this.errorOut = "ERROR: Cannot find variable with name " + func[1] + "@" + func[0] + "[line " + this.line + "]";
+        this.errorOut = "ERROR: Cannot find variable with name " + func[1] + "@" + func[0] + " [line " + this.line + "]";
         return;
       }
 
     } else {
       this.isValid = false;
-      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function [line " + this.line + "]";
+      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "[line " + this.line + "]";
       return;
     }
 
     if (2 <= func.length - 1 && doesExist) {
-      if (isNaN(parseFloat(func[1]))) {
+      if (isNaN(parseFloat(func[2]))) {
         this.isValid = false;
-        this.errorOut = "ERROR: Incorrect type @ n (number of shapes) parameter [line " + this.line + "]";
+        this.errorOut = "ERROR: Incorrect type @ scale parameter [line " + this.line + "]";
         return;
       }
-      scale = parseFloat(func[1]) / 100;
-      shape.set({
-        scaleY: shape.height * scale,
-        scaleX: shape.width * scale
-      });
+      scale = parseFloat(func[2]);
+      shape.animate('scaleX', scale, { onChange: this.canvas.renderAll.bind(this.canvas) });
+      shape.animate('scaleY', scale, { onChange: this.canvas.renderAll.bind(this.canvas) });
 
 
 
     } else {
       this.isValid = false;
-      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + name + " function [line " + this.line + "]";
+      this.errorOut = "ERROR: Incorrect number of parameters provided for " + func[0] + "@" + "scale function [line " + this.line + "]";
       return;
     }
 

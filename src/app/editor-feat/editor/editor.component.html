@@ -33,13 +33,18 @@
           <mat-slider class="speed_slider" style="color:#007FFF" *ngIf="this.showSS" thumbLabel [displayWith]="formatLabel" [max]=5 [min]=0.25 [step]=0.25 [tickInterval]=0.5 [(ngModel)]="speedVal">
           </mat-slider>
           <button mat-button style="color:#007FFF" (click)="showSlider()" *ngIf="this.showSS">OK</button>
+          <br />
+          <p class="angular-linebreaks" *ngIf="this.hasSubmit" [ngClass]="{'red': !this.isValid, 'green': this.isValid}">
+            {{errorOut}}
+          </p>
+          <br />
         </mat-card>
       </div>
       <div (window:resize)="onResize()" class="column_right" #rColumn>
         <mat-card>
-          <p class="angular-linebreaks" *ngIf="this.hasSubmit" [ngClass]="{'red': !this.isValid, 'green': this.isValid}">
+          <!-- <p class="angular-linebreaks" *ngIf="this.hasSubmit" [ngClass]="{'red': !this.isValid, 'green': this.isValid}">
             {{errorOut}}
-          </p>
+          </p> -->
           <div class=card_div #rMatCard>
             <div #canvasContainer>
               <canvas id=canvas></canvas>
