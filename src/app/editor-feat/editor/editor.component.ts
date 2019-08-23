@@ -54,12 +54,16 @@ export class EditorComponent implements OnInit {
     return shift;
   }
 
+  public getZIndex(shape){
+    return this.canvas.getObjects().indexOf(shape);
+  }
+
   //IMPORTANT: SAVE OBJECTS IN DATA STRUCTURES
 
   /* CONSTRCTOR & INIT */
   constructor() { }
   ngOnInit() {
-    this.canvas = new fabric.Canvas('canvas', { selection: false });
+    this.canvas = new fabric.Canvas('canvas', { preserveObjectStacking: true, selection: false});
     //working but cannot dynamically resize ——> rightMC is a the right column HTMLElement
     this.canvas.setHeight((this.rightMC.nativeElement as HTMLElement).offsetHeight);
     this.canvas.setWidth((this.rightMC.nativeElement as HTMLElement).offsetWidth);
@@ -816,11 +820,13 @@ export class EditorComponent implements OnInit {
     this.delay_pop = 1;
   }
 
-  /* GROUP OBJECTS */
+  /* GROUP OBJECTS — need to find a way to save grouped object & position */
   private groupObject(func: string[]) {
     var group_shapes = [];
     var name = func[1];
     var total_objects;
+    //start minz at some ridiculously long number
+    var minZ = this.index;
 
     if (2 <= func.length - 1) {
       if (isNaN(parseFloat(func[2]))) {
@@ -837,11 +843,15 @@ export class EditorComponent implements OnInit {
     }
 
     for (var i = 3; i < total_objects + 3; i++) {
-
       if (i <= func.length - 1) {
         if (this.map.has(func[i])) {
           var number = this.map.get(func[i]);
           var shift = this.getshift(number);
+          var z = this.getZIndex(this.canvas.item(number - shift));
+
+          if(z < minZ){
+            minZ = z;
+          }
           group_shapes.push(this.canvas.item(number - shift));
 
         } else {
@@ -861,8 +871,15 @@ export class EditorComponent implements OnInit {
       var group = new fabric.Group(group_shapes);
       group.set('selectable', false);
       this.canvas.add(group);
-      this.map.set(name, this.index);
-      this.index++;
+      this.canvas.moveTo(group, minZ);
+      this.map.set(name, minZ);
+
+      console.log(this.canvas.getObjects())
+
+      //increment only if new index given
+      if(minZ == this.index){
+        this.index++;
+      }
     }
 
   }
@@ -995,11 +1012,13 @@ export class EditorComponent implements OnInit {
     this.canvas.clear();
     this.map.clear();
   }
+
   //Shows the slider
   showSlider() {
     this.showSS = !this.showSS;
     this.displaySpeed = this.speedVal;
   }
+
   //display speed
   formatLabel(speedVal: number | null) {
     return speedVal + '″';

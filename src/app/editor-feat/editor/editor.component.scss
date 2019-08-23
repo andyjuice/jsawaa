@@ -1,9 +1,9 @@
-
 /* LINEBREAKS TBD WHETHER WE KEEP OR NOT */
-.angular-linebreaks{
+.angular-linebreaks {
   white-space: pre-wrap;
 }
-mat-card{
+
+mat-card {
   width: 90%;
   height: 90%;
   min-width: 350px;
@@ -11,10 +11,11 @@ mat-card{
   margin: auto;
 }
 
-.card_div{
+.card_div {
   width: 100%;
   height: 100%;
 }
+
 .row {
   display: flex;
   height: 100%;
@@ -23,63 +24,81 @@ mat-card{
 .column_left {
   flex: 40%;
 }
-.column_right{
+
+.column_right {
   flex: 60%;
 }
 
-canvas{
+canvas {
   border: 0.5px solid lightblue;
   border-radius: 5px;
-
 }
-.clear_button{
+
+.clear_button {
   margin-left: 10px;
 }
 
-.red{
+.red {
   border-left: 5px solid red;
   background-color: #ffcccc;
   padding: 4px;
-;
 }
-.green{
+
+.green {
   border-left: 5px solid green;
   background-color: #ccffcc;
   padding: 4px;
 }
-.speed_slider{
+
+.speed_slider {
   margin-left: 10px;
 }
+
 ::ng-deep .mat-accent .mat-slider-thumb {
-    background-color: #87CEEB;
-}
-::ng-deep .mat-accent .mat-slider-thumb-label {
-    background-color: #87CEEB;
-}
-::ng-deep .mat-accent .mat-slider-track-fill {
-    background-color: #87CEEB;
-}
-mat-toolbar{
-  overflow:visible !important;
+  background-color: #87CEEB;
 }
 
-.logo{
+::ng-deep .mat-accent .mat-slider-thumb-label {
+  background-color: #87CEEB;
+}
+
+::ng-deep .mat-accent .mat-slider-track-fill {
+  background-color: #87CEEB;
+}
+
+mat-toolbar {
+  overflow: visible !important;
+}
+
+.logo {
   max-width: 10%;
 }
-.brand{
+
+.brand {
   max-width: 90%;
 }
-#title{
+
+#title {
   float: right !important;
 }
-mat-sidenav{
+
+mat-sidenav {
   width: 250px;
 }
+
 .rotate:focus i {
   animation: rotate 1s ease-in-out 0s;
 }
-
 @keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(90deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(90deg);
+  }
+}
+
+#text-editor {
+  max-height : 625px !important;
 }

@@ -3,7 +3,7 @@
   <mat-sidenav-container fullscreen>
     <mat-sidenav #sidenav mode="side" [(opened)]="opened">
       <button routerLink="/editor">editor</button>
-      <button routerLink="/documentation">doc</button>
+      <a target="_blank" href="./assets/img/doc.html">doc</a>
 
     </mat-sidenav>
 
@@ -25,6 +25,7 @@
         </div>
       </mat-toolbar>
       <app-editor></app-editor>
+      <app-doc-list></app-doc-list>
     </mat-sidenav-content>
   </mat-sidenav-container>
 

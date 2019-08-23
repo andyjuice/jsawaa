@@ -9,6 +9,9 @@ import { DocListComponent } from './doc-list/doc-list.component';
   imports: [
     CommonModule,
     DocRoutingModule
+  ],
+  exports: [
+    DocListComponent
   ]
 })
 export class DocModule { }

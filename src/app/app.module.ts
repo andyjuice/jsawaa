@@ -7,19 +7,16 @@ import { MatInputModule, MatCardModule, MatButtonModule, MatToolbarModule, MatSl
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { EditorComponent } from './editor-feat/editor/editor.component';
+import { EditorFeatModule } from './editor-feat/editor-feat.module';
+import { DocModule } from './doc/doc.module';
 import { AceEditorModule} from 'ng2-ace-editor';
-import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    EditorComponent,
-    HeaderComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     AceEditorModule,
     FormsModule,
     BrowserAnimationsModule,
@@ -28,7 +25,11 @@ import { HeaderComponent } from './header/header.component';
     MatCardModule,
     MatToolbarModule,
     MatSliderModule,
-    MatSidenavModule
+    MatSidenavModule,
+    EditorFeatModule,
+    DocModule,
+    AppRoutingModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]
